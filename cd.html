@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown to 24th March</title>
+    <style>
+
+/* Initially blur everything EXCEPT the quiz */
+#mainContent.locked {
+    filter: blur(10px);
+    pointer-events: none; /* Disable interactions until unlocked */
+}
+
+/* Remove blur when quiz is passed */
+#mainContent.unlocked {
+    filter: none;
+    pointer-events: auto;
+}
+
+
+/* Quiz overlay box (visible at start) */
+#quizContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px); /* Keeps the background blurred */
+    background: rgba(0, 0, 0, 0.5); /* Dark overlay */
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    font-family: 'Poppins', sans-serif;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Stylish input fields */
+#quizContainer input {
+    font-size: 1em; /* Slightly smaller */
+    padding: 8px;
+    width: 50%;
+    max-width: 300px; /* Keeps it compact */
+    border: 2px solid #ff4081; /* Pink border */
+    border-radius: 20px; /* Rounded look */
+    text-align: center;
+    outline: none;
+    background: white;
+    color: #ff4081;
+    box-shadow: 0px 0px 8px rgba(255, 64, 129, 0.4); /* Soft glow */
+    margin: 10px 0;
+}
+
+/* Stylish Submit Button */
+#quizContainer button {
+    font-size: 1em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background: #ff4081;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0px 4px 8px rgba(255, 64, 129, 0.4);
+}
+
+#quizContainer button:hover {
+    background: #e91e63;
+    box-shadow: 0px 6px 12px rgba(233, 30, 99, 0.5);
+}
+
+/* Fade-out animation when quiz disappears */
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease-in-out;
+}
+
+
+
+
+
+        body {
+            background-color: pink;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            color: #333;
+            background: 
+                url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Ctext x="50%" y="50%" font-size="30" text-anchor="middle" fill="rgba(255,75,92,0.3)" transform="rotate(-45 50 50)"%3E🎀%3C/text%3E%3C/svg%3E') repeat;
+            background-size: 80px 80px;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 600px;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #ff4b5c;
+            font-weight: bold;
+        }
+
+        .message {
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 30px;
+            background-color: #ddd;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 100%; /* Set to 100% for testing purposes */
+            background-color: #ff4b5c;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            border-radius: 20px;
+        }
+
+        .timer {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #ff4b5c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .timer span {
+            padding: 10px;
+            background-color: #ffb3b3;
+            border-radius: 10px;
+            color: white;
+        }
+
+        /* Pop-up GIF styles */
+        .popup {
+            display: block; /* Make sure the pop-up is visible for testing */
+            position: fixed;
+            top: 20%;
+            right: 10px;
+            width: 300px;
+            height: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            animation: popUpAnimation 0.5s ease-out forwards;
+        }
+	
+		
+.close-btn {
+    background: linear-gradient(45deg, #FF6B6B, #D84372); /* Updated gradient */
+    color: white;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Circular shape */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 10px rgba(216, 67, 114, 0.4);
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    background: linear-gradient(45deg, #D84372, #FF6B6B);
+    transform: scale(1.1);
+    box-shadow: 0px 6px 15px rgba(216, 67, 114, 0.6);
+}
+
+
+	 /* Toggle button (<< and >>) */
+        .toggle-btn {
+            position: fixed;
+            top: 20%;
+            right: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff4b5c;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+	.toggle-btn:hover {
+            color: #ff2b3b;
+        }
+
+        /* Pop-up animation */
+        @keyframes popUpAnimation {
+            0% {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Quiz Options */
+        .quiz-option {
+            background-color: #ff4b5c;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .quiz-option:hover {
+            background-color: #ff2b3b;
+        }
+
+        /* Quiz Result */
+        #quizResult {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ff4b5c;
+            margin-top: 20px;
+        }
+
+        /* Pop-up Cat GIF */
+        #popupImage {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        /* Floating Ribbons (🎀) effect */
+        .ribbon {
+            position: absolute;
+            font-size: 2em;
+            opacity: 0.8;
+            animation: floatRibbon 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatRibbon {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-30px) rotate(10deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0) rotate(-10deg);
+                opacity: 0.8;
+            }
+        }
+  /* Positioning ribbons with random positions */
+        .ribbon:nth-child(1) { top: 10%; left: 5%; animation-duration: 5s; }
+        .ribbon:nth-child(2) { top: 30%; left: 50%; animation-duration: 6s; }
+        .ribbon:nth-child(3) { top: 50%; left: 10%; animation-duration: 7s; }
+        .ribbon:nth-child(4) { top: 70%; left: 80%; animation-duration: 4s; }
+        .ribbon:nth-child(5) { top: 90%; left: 30%; animation-duration: 6s; }
+        .ribbon:nth-child(6) { top: 20%; left: 60%; animation-duration: 8s; }
+        .ribbon:nth-child(7) { top: 40%; left: 15%; animation-duration: 5s; }
+        .ribbon:nth-child(8) { top: 60%; left: 75%; animation-duration: 7s; }
+        .ribbon:nth-child(9) { top: 80%; left: 20%; animation-duration: 6s; }
+        .ribbon:nth-child(10) { top: 30%; left: 80%; animation-duration: 4.5s; }
+        .ribbon:nth-child(11) { top: 50%; left: 40%; animation-duration: 5s; }
+        .ribbon:nth-child(12) { top: 70%; left: 10%; animation-duration: 7s; }
+        .ribbon:nth-child(13) { top: 10%; left: 80%; animation-duration: 9s; }
+        .ribbon:nth-child(14) { top: 40%; left: 60%; animation-duration: 6s; }
+        .ribbon:nth-child(15) { top: 60%; left: 30%; animation-duration: 5s; }
+        .ribbon:nth-child(16) { top: 90%; left: 70%; animation-duration: 6s; }
+        .ribbon:nth-child(17) { top: 15%; left: 45%; animation-duration: 7.5s; }
+        .ribbon:nth-child(18) { top: 25%; left: 35%; animation-duration: 6.3s; }
+        .ribbon:nth-child(19) { top: 45%; left: 70%; animation-duration: 7s; }
+        .ribbon:nth-child(20) { top: 55%; left: 25%; animation-duration: 5.5s; }
+        .ribbon:nth-child(21) { top: 65%; left: 80%; animation-duration: 4.5s; }
+        .ribbon:nth-child(22) { top: 75%; left: 15%; animation-duration: 7.2s; }
+        .ribbon:nth-child(23) { top: 85%; left: 60%; animation-duration: 6s; }
+        .ribbon:nth-child(24) { top: 10%; left: 65%; animation-duration: 5.8s; }
+        .ribbon:nth-child(25) { top: 20%; left: 50%; animation-duration: 6.3s; }
+        .ribbon:nth-child(26) { top: 35%; left: 40%; animation-duration: 7.5s; }
+        .ribbon:nth-child(27) { top: 55%; left: 10%; animation-duration: 8s; }
+        .ribbon:nth-child(28) { top: 75%; left: 80%; animation-duration: 4.5s; }
+        .ribbon:nth-child(29) { top: 85%; left: 20%; animation-duration: 6.5s; }
+        .ribbon:nth-child(30) { top: 90%; left: 60%; animation-duration: 5s; }
+        /* Animation for "Saddddd" text */
+        .floating-sad {
+            position: absolute;
+            font-size: 2em;
+            color: #ff4b5c;
+            opacity: 1;
+            animation: floatSadText 3s forwards;
+	    text-shadow: 0px 0px 10px rgba(255, 75, 92, 0.8);
+        }
+
+        @keyframes floatSadText {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translateY(-100px);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-200px);
+                opacity: 0;
+            }
+
+        }
+
+
+    </style>
+</head>
+<body onload="lockPage()">
+
+<!-- Quiz Overlay (Appears on Page Load) -->
+<div id="quizContainer">
+    <h2>Is it really Mi Lady?🤨 Answer These Questions to Unlock the Page🧐</h2>
+    
+    <label>Question 1: What food did we have on our first date?</label>
+    <input type="text" id="question1"><br><br>
+
+    <label>Question 2: What’s the one gift I gave you that you still use to this day?</label>
+    <input type="text" id="question2"><br><br>
+
+    <button onclick="checkAnswers()">Submit</button>
+    <p id="quizMessage" style="color: red; font-weight: bold;"></p>
+</div>
+
+<!-- Wrap the main content -->
+<div id="mainContent">
+    <div class="container">
+        <h1>Countdown to 24th March</h1>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <!-- Progress Message -->
+        <div class="message" id="message">🎀Aakhir aa hi gayi Laila.....🎀</div>
+
+        <!-- Timer -->
+        <div class="timer" id="timer">
+            <span id="days">00</span>
+            <span id="hours">00</span>
+            <span id="minutes">00</span>
+            <span id="seconds">00</span>
+        </div>
+    </div>
+</div>
+
+    <!-- Pop-up with Cat GIF -->
+    <div id="popup" class="popup" style="display:none">
+    <button class="close-btn" onclick="closePopup()">»</button> <!-- Added this -->
+    <img id="popupImage" src="https://media.tenor.com/yasH25NcmgUAAAAM/cat-anime.gif" alt="Pop-up Cat GIF" />
+    <div id="popupText">Did you like the website?</div>
+    <div class="quiz-option" onclick="handleAnswer('yes')">Yes</div>
+    <div class="quiz-option" onclick="handleAnswer('no')">No</div>
+    <div id="quizResult"></div>
+</div>
+
+<button id="toggleButton" class="toggle-btn" onclick="togglePopup()">»</button>
+
+    <!-- Floating Ribbons -->
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+    <div class="ribbon">🎀</div>
+
+<script>
+
+// Lock the page on load
+function lockPage() {
+    document.getElementById("mainContent").classList.add("locked");
+}
+
+function hideQuiz() {
+    let quizContainer = document.getElementById("quizContainer");
+    quizContainer.classList.add("hidden");
+    setTimeout(() => {
+        quizContainer.style.display = "none";
+    }, 500);
+}
+
+function checkAnswers() {
+    let answer1 = document.getElementById("question1").value.trim().toLowerCase();
+    let answer2 = document.getElementById("question2").value.trim().toLowerCase();
+
+    // Set correct answers
+    if (answer1 === "pizza" && answer2 === "pen") {
+        let mainContent = document.getElementById("mainContent");
+        mainContent.classList.remove("locked"); // Remove blur
+        mainContent.classList.add("unlocked"); // Enable page
+        
+
+	hideQuiz();
+
+        // ✅ Show the cat GIF popup after unlocking
+        document.getElementById("popup").style.display = "block";
+    } else {
+        document.getElementById("quizMessage").textContent = "❌ Wrong answer/s! Try again.";
+    }
+}
+
+
+
+let isPopupVisible = true; // Popup is initially visible
+
+function togglePopup() {
+    const popup = document.getElementById("popup");
+    const button = document.getElementById("toggleButton");
+
+    if (popup.style.display === "block" || popup.style.display === "") {
+        popup.style.display = "none";  // Hide the popup
+        button.innerHTML = "»"; // Change button to >>
+        isPopupVisible = false;
+    } else {
+        popup.style.display = "block";  // Show the popup
+        button.innerHTML = "«"; // Change button to <<
+        isPopupVisible = true;
+    }
+}
+
+
+        // For testing purposes, set the progress bar to 100% and show the popup immediately
+        document.getElementById("progressBar").style.width = "100%";  // Set progress bar to full
+        
+
+        let sadTextInterval;
+
+        // Function to handle quiz answer
+        function handleAnswer(answer) {
+            const resultElement = document.getElementById("quizResult");
+
+            if (answer === "yes") {
+                resultElement.innerHTML = "IKRRR, kaha tha Laila, Efforts toh leta hu,ab tumhe hi nahi maanna";
+                // Stop sad text floating when Yes is clicked
+                clearInterval(sadTextInterval);
+            } else {
+                resultElement.innerHTML = "Sadddddddd(┬┬﹏┬┬)🥹😭😢😭😭";
+                // Show sad text floating up from random positions until user presses Yes
+                sadTextInterval = setInterval(createSadText, 400); // Create sad text every 500ms
+                resultElement.innerHTML += "<br>Kadar hi kaha tumhe, khair, Press Yes to stop😞";
+            }
+        }
+	
+	
+
+
+        // Function to create sad text at random positions
+        function createSadText() {
+            const sadText = document.createElement("div");
+            sadText.classList.add("floating-sad");
+            sadText.innerText = "Sadddddddd(┬┬﹏┬┬)🥹😭😭😭😭";
+
+            // Randomize position
+            const randomX = Math.random() * window.innerWidth;
+            const randomY = Math.random() * window.innerHeight;
+
+            // Set the position of the sad text
+            sadText.style.left = `${randomX}px`;
+            sadText.style.top = `${randomY}px`;
+
+            document.body.appendChild(sadText);
+
+            // Remove sad text after animation completes
+            setTimeout(() => {
+                sadText.remove();
+            }, 3000); // Remove after 3 seconds
+        }
+
+	 function closePopup() {
+            document.getElementById("popup").style.display = "none";
+        }
+    </script>
+</body>
+</html>
