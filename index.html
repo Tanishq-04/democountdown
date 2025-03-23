@@ -238,6 +238,12 @@
             if (timeRemaining <= 0) {
                 document.getElementById("message").textContent = "Time's up!";
                 document.getElementById("progressBar").style.width = "100%";
+
+                setTimeout(() => {
+            window.location.href = "cd.html";  // Redirects to cd.html
+        }, 3000); // Redirects after 3 seconds (adjust if needed)
+		
+                
                 return;
             }
 
