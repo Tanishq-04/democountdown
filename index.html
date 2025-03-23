@@ -1,285 +1,285 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title> Mi Pookie Lady's Countdown to 24th March</title>
-    <style>
-        body {
-            background-color: pink;
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-            color: #333;
-            background: 
-                url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Ctext x="50%" y="50%" font-size="30" text-anchor="middle" fill="rgba(255,75,92,0.3)" transform="rotate(-45 50 50)"%3E🎀%3C/text%3E%3C/svg%3E') repeat;
-            background-size: 80px 80px;
-            background-position: center;
-            overflow: hidden;
-        }
-
-        .container {
-            width: 80%;
-            max-width: 600px;
-            z-index: 1;
-        }
-
-        h1 {
-            font-size: 3em;
-            color: #ff4b5c;
-            font-weight: bold;
-        }
-
-        .message {
-            font-size: 2em;
-            font-weight: bold;
-            margin-top: 20px;
-        }
-
-        .progress-container {
-            width: 100%;
-            height: 30px;
-            background-color: #ddd;
-            border-radius: 20px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0;
-            background-color: #ff4b5c;
-            text-align: center;
-            line-height: 30px;
-            color: white;
-            border-radius: 20px;
-        }
-
-        .timer {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #ff4b5c;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .timer span {
-            padding: 10px;
-            background-color: #ffb3b3;
-            border-radius: 10px;
-            color: white;
-        }
-
-        /* Pop-up GIF styles */
-        .popup {
-            display: none; /* Initially hidden */
-            position: fixed;
-            top: 20%;
-            right: 10px;
-            width: 150px;
-            height: auto;
-            border-radius: 10px; /* Smoothen the edges */
-            z-index: 1000; /* Ensure it appears above other elements */
-            animation: popUpAnimation 0.5s ease-out forwards;
-        }
-
-        /* Pop-up animation */
-        @keyframes popUpAnimation {
-            0% {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            100% {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Pop-up text styles */
-        #popupText {
-            text-align: center;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #ff4b5c;
-            margin-top: 10px;
-            padding: 5px;
-            background-color: rgba(255, 255, 255, 0.8); /* Optional: background color for the text */
-            border-radius: 5px;
-        }
-
-        /* Floating ribbons (🎀) effect */
-        .ribbon {
-            position: absolute;
-            font-size: 2em;
-            opacity: 0.8;
-            animation: floatRibbon 4s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        @keyframes floatRibbon {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 0.8;
-            }
-            50% {
-                transform: translateY(-30px) rotate(10deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(0) rotate(-10deg);
-                opacity: 0.8;
-            }
-        }
-
-        /* Positioning ribbons with random positions */
-        .ribbon:nth-child(1) { top: 10%; left: 5%; animation-duration: 5s; }
-        .ribbon:nth-child(2) { top: 30%; left: 50%; animation-duration: 6s; }
-        .ribbon:nth-child(3) { top: 50%; left: 10%; animation-duration: 7s; }
-        .ribbon:nth-child(4) { top: 70%; left: 80%; animation-duration: 4s; }
-        .ribbon:nth-child(5) { top: 90%; left: 30%; animation-duration: 6s; }
-        .ribbon:nth-child(6) { top: 20%; left: 60%; animation-duration: 8s; }
-        .ribbon:nth-child(7) { top: 40%; left: 15%; animation-duration: 5s; }
-        .ribbon:nth-child(8) { top: 60%; left: 75%; animation-duration: 7s; }
-        .ribbon:nth-child(9) { top: 80%; left: 20%; animation-duration: 6s; }
-        .ribbon:nth-child(10) { top: 30%; left: 80%; animation-duration: 4.5s; }
-        .ribbon:nth-child(11) { top: 50%; left: 40%; animation-duration: 5s; }
-        .ribbon:nth-child(12) { top: 70%; left: 10%; animation-duration: 7s; }
-        .ribbon:nth-child(13) { top: 10%; left: 80%; animation-duration: 9s; }
-        .ribbon:nth-child(14) { top: 40%; left: 60%; animation-duration: 6s; }
-        .ribbon:nth-child(15) { top: 60%; left: 30%; animation-duration: 5s; }
-        .ribbon:nth-child(16) { top: 90%; left: 70%; animation-duration: 6s; }
-        .ribbon:nth-child(17) { top: 15%; left: 45%; animation-duration: 7.5s; }
-        .ribbon:nth-child(18) { top: 25%; left: 35%; animation-duration: 6.3s; }
-        .ribbon:nth-child(19) { top: 45%; left: 70%; animation-duration: 7s; }
-        .ribbon:nth-child(20) { top: 55%; left: 25%; animation-duration: 5.5s; }
-        .ribbon:nth-child(21) { top: 65%; left: 80%; animation-duration: 4.5s; }
-        .ribbon:nth-child(22) { top: 75%; left: 15%; animation-duration: 7.2s; }
-        .ribbon:nth-child(23) { top: 85%; left: 60%; animation-duration: 6s; }
-        .ribbon:nth-child(24) { top: 10%; left: 65%; animation-duration: 5.8s; }
-        .ribbon:nth-child(25) { top: 20%; left: 50%; animation-duration: 6.3s; }
-        .ribbon:nth-child(26) { top: 35%; left: 40%; animation-duration: 7.5s; }
-        .ribbon:nth-child(27) { top: 55%; left: 10%; animation-duration: 8s; }
-        .ribbon:nth-child(28) { top: 75%; left: 80%; animation-duration: 4.5s; }
-        .ribbon:nth-child(29) { top: 85%; left: 20%; animation-duration: 6.5s; }
-        .ribbon:nth-child(30) { top: 90%; left: 60%; animation-duration: 5s; }
-
-        /* Ensure the popup image does not get cut off */
-        .popup img {
-            width: 100%;
-            height: auto;
-            object-fit: contain; /* Ensures the image is scaled properly */
-            border-radius: 10px;
-        }
-
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Countdown to 24th March</h1>
-       <h3>All the best for your examsssss🎀</h3>
-        <!-- Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-bar" id="progressBar"></div>
-        </div>
-
-        <!-- Progress Message -->
-        <div class="message" id="message">Loading...</div>
-
-        <!-- Timer -->
-        <div class="timer" id="timer">
-            <span id="days">00</span>
-            <span id="hours">00</span>
-            <span id="minutes">00</span>
-            <span id="seconds">00</span>
-        </div>
-    </div>
-
-    <!-- Pop-up GIF (appears on the right side) -->
-    <div id="popup" class="popup">
-        <img src="https://media.tenor.com/yasH25NcmgUAAAAM/cat-anime.gif" alt="Pop-up Cat GIF" />
-        <div id="popupText">ladies🎀</div> <!-- Text below the GIF -->
-    </div>
-
-    <!-- Floating Ribbons -->
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-    <div class="ribbon">🎀</div>
-
-    <script>
-        function updateCountdown() {
-            const startDate = new Date("February 20, 2025 00:00:00");  // Start of the countdown (20th February)
-            const targetDate = new Date("March 24, 2025 00:00:00");  // Target date is 24th March
-            const currentDate = new Date();
-
-            const timeRemaining = targetDate - currentDate;
-
-            if (timeRemaining <= 0) {
-                document.getElementById("message").textContent = "Time's up!";
-                document.getElementById("progressBar").style.width = "100%";
-
-                setTimeout(() => {
-            window.location.href = "cd.html";  // Redirects to cd.html
-        }, 3000); // Redirects after 3 seconds (adjust if needed)
-		
-                
-                return;
-            }
-
-            // Calculate days, hours, minutes, and seconds
-            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-            // Update the timer display
-            document.getElementById("days").textContent = days.toString().padStart(2, "0");
-            document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
-            document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
-            document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
-
-            // Update the progress bar
-            const totalTime = targetDate - startDate;
-            const progress = Math.round(((currentDate - startDate) / totalTime) * 100);
-            document.getElementById("progressBar").style.width = progress + "%";
-
-            if (progress >= 10) {
-                // Show the popup when progress reaches 10%
-                //document.getElementById("popup").style.display = "block";
-
-                // Existing code for message and cat image
-                document.getElementById("message").textContent = "A few more hours 'Mi lady' ko online aane";
-            }
-
-            if (progress >= 100) {
-                document.getElementById("message").textContent = "Aakhir aa hi gayi vapas Laila🎀
-";
-                document.getElementById("popup").style.display = "none"; // Hide popup at 100%
-            }
-        }
-
-        setInterval(updateCountdown, 1000);  // Update every second
-    </script>
-</body>
-</html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title> Mi Pookie Lady's Countdown to 24th March</title>
+     <style>
+         body {
+             background-color: pink;
+             font-family: 'Arial', sans-serif;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             height: 100vh;
+             margin: 0;
+             text-align: center;
+             color: #333;
+             background: 
+                 url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Ctext x="50%" y="50%" font-size="30" text-anchor="middle" fill="rgba(255,75,92,0.3)" transform="rotate(-45 50 50)"%3E🎀%3C/text%3E%3C/svg%3E') repeat;
+             background-size: 80px 80px;
+             background-position: center;
+             overflow: hidden;
+         }
+ 
+         .container {
+             width: 80%;
+             max-width: 600px;
+             z-index: 1;
+         }
+ 
+         h1 {
+             font-size: 3em;
+             color: #ff4b5c;
+             font-weight: bold;
+         }
+ 
+         .message {
+             font-size: 2em;
+             font-weight: bold;
+             margin-top: 20px;
+         }
+ 
+         .progress-container {
+             width: 100%;
+             height: 30px;
+             background-color: #ddd;
+             border-radius: 20px;
+             overflow: hidden;
+             margin: 20px 0;
+         }
+ 
+         .progress-bar {
+             height: 100%;
+             width: 0;
+             background-color: #ff4b5c;
+             text-align: center;
+             line-height: 30px;
+             color: white;
+             border-radius: 20px;
+         }
+ 
+         .timer {
+             font-size: 2.5em;
+             font-weight: bold;
+             color: #ff4b5c;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             gap: 10px;
+             margin-top: 20px;
+         }
+ 
+         .timer span {
+             padding: 10px;
+             background-color: #ffb3b3;
+             border-radius: 10px;
+             color: white;
+         }
+ 
+         /* Pop-up GIF styles */
+         .popup {
+             display: none; /* Initially hidden */
+             position: fixed;
+             top: 20%;
+             right: 10px;
+             width: 150px;
+             height: auto;
+             border-radius: 10px; /* Smoothen the edges */
+             z-index: 1000; /* Ensure it appears above other elements */
+             animation: popUpAnimation 0.5s ease-out forwards;
+         }
+ 
+         /* Pop-up animation */
+         @keyframes popUpAnimation {
+             0% {
+                 transform: translateX(100%);
+                 opacity: 0;
+             }
+             100% {
+                 transform: translateX(0);
+                 opacity: 1;
+             }
+         }
+ 
+         /* Pop-up text styles */
+         #popupText {
+             text-align: center;
+             font-size: 1.2em;
+             font-weight: bold;
+             color: #ff4b5c;
+             margin-top: 10px;
+             padding: 5px;
+             background-color: rgba(255, 255, 255, 0.8); /* Optional: background color for the text */
+             border-radius: 5px;
+         }
+ 
+         /* Floating ribbons (🎀) effect */
+         .ribbon {
+             position: absolute;
+             font-size: 2em;
+             opacity: 0.8;
+             animation: floatRibbon 4s ease-in-out infinite;
+             pointer-events: none;
+         }
+ 
+         @keyframes floatRibbon {
+             0% {
+                 transform: translateY(0) rotate(0deg);
+                 opacity: 0.8;
+             }
+             50% {
+                 transform: translateY(-30px) rotate(10deg);
+                 opacity: 1;
+             }
+             100% {
+                 transform: translateY(0) rotate(-10deg);
+                 opacity: 0.8;
+             }
+         }
+ 
+         /* Positioning ribbons with random positions */
+         .ribbon:nth-child(1) { top: 10%; left: 5%; animation-duration: 5s; }
+         .ribbon:nth-child(2) { top: 30%; left: 50%; animation-duration: 6s; }
+         .ribbon:nth-child(3) { top: 50%; left: 10%; animation-duration: 7s; }
+         .ribbon:nth-child(4) { top: 70%; left: 80%; animation-duration: 4s; }
+         .ribbon:nth-child(5) { top: 90%; left: 30%; animation-duration: 6s; }
+         .ribbon:nth-child(6) { top: 20%; left: 60%; animation-duration: 8s; }
+         .ribbon:nth-child(7) { top: 40%; left: 15%; animation-duration: 5s; }
+         .ribbon:nth-child(8) { top: 60%; left: 75%; animation-duration: 7s; }
+         .ribbon:nth-child(9) { top: 80%; left: 20%; animation-duration: 6s; }
+         .ribbon:nth-child(10) { top: 30%; left: 80%; animation-duration: 4.5s; }
+         .ribbon:nth-child(11) { top: 50%; left: 40%; animation-duration: 5s; }
+         .ribbon:nth-child(12) { top: 70%; left: 10%; animation-duration: 7s; }
+         .ribbon:nth-child(13) { top: 10%; left: 80%; animation-duration: 9s; }
+         .ribbon:nth-child(14) { top: 40%; left: 60%; animation-duration: 6s; }
+         .ribbon:nth-child(15) { top: 60%; left: 30%; animation-duration: 5s; }
+         .ribbon:nth-child(16) { top: 90%; left: 70%; animation-duration: 6s; }
+         .ribbon:nth-child(17) { top: 15%; left: 45%; animation-duration: 7.5s; }
+         .ribbon:nth-child(18) { top: 25%; left: 35%; animation-duration: 6.3s; }
+         .ribbon:nth-child(19) { top: 45%; left: 70%; animation-duration: 7s; }
+         .ribbon:nth-child(20) { top: 55%; left: 25%; animation-duration: 5.5s; }
+         .ribbon:nth-child(21) { top: 65%; left: 80%; animation-duration: 4.5s; }
+         .ribbon:nth-child(22) { top: 75%; left: 15%; animation-duration: 7.2s; }
+         .ribbon:nth-child(23) { top: 85%; left: 60%; animation-duration: 6s; }
+         .ribbon:nth-child(24) { top: 10%; left: 65%; animation-duration: 5.8s; }
+         .ribbon:nth-child(25) { top: 20%; left: 50%; animation-duration: 6.3s; }
+         .ribbon:nth-child(26) { top: 35%; left: 40%; animation-duration: 7.5s; }
+         .ribbon:nth-child(27) { top: 55%; left: 10%; animation-duration: 8s; }
+         .ribbon:nth-child(28) { top: 75%; left: 80%; animation-duration: 4.5s; }
+         .ribbon:nth-child(29) { top: 85%; left: 20%; animation-duration: 6.5s; }
+         .ribbon:nth-child(30) { top: 90%; left: 60%; animation-duration: 5s; }
+ 
+         /* Ensure the popup image does not get cut off */
+         .popup img {
+             width: 100%;
+             height: auto;
+             object-fit: contain; /* Ensures the image is scaled properly */
+             border-radius: 10px;
+         }
+ 
+     </style>
+ </head>
+ <body>
+     <div class="container">
+         <h1>Countdown to 24th March</h1>
+        <h3>All the best for your examsssss🎀</h3>
+         <!-- Progress Bar -->
+         <div class="progress-container">
+             <div class="progress-bar" id="progressBar"></div>
+         </div>
+ 
+         <!-- Progress Message -->
+         <div class="message" id="message">Loading...</div>
+ 
+         <!-- Timer -->
+         <div class="timer" id="timer">
+             <span id="days">00</span>
+             <span id="hours">00</span>
+             <span id="minutes">00</span>
+             <span id="seconds">00</span>
+         </div>
+     </div>
+ 
+     <!-- Pop-up GIF (appears on the right side) -->
+     <div id="popup" class="popup">
+         <img src="https://media.tenor.com/yasH25NcmgUAAAAM/cat-anime.gif" alt="Pop-up Cat GIF" />
+         <div id="popupText">ladies🎀</div> <!-- Text below the GIF -->
+     </div>
+ 
+     <!-- Floating Ribbons -->
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+     <div class="ribbon">🎀</div>
+ 
+     <script>
+         function updateCountdown() {
+             const startDate = new Date("February 20, 2025 00:00:00");  // Start of the countdown (20th February)
+             const targetDate = new Date("March 24, 2025 00:00:00");  // Target date is 24th March
+             const currentDate = new Date();
+ 
+             const timeRemaining = targetDate - currentDate;
+ 
+             if (timeRemaining <= 0) {
+                 document.getElementById("message").textContent = "Time's up!";
+                 document.getElementById("progressBar").style.width = "100%";
+ 
+                 setTimeout(() => {
+             window.location.href = "cd.html";  // Redirects to cd.html
+         }, 3000); // Redirects after 3 seconds (adjust if needed)
+ 
+ 
+                 return;
+             }
+ 
+             // Calculate days, hours, minutes, and seconds
+             const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+             const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+             const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+             const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+ 
+             // Update the timer display
+             document.getElementById("days").textContent = days.toString().padStart(2, "0");
+             document.getElementById("hours").textContent = hours.toString().padStart(2, "0");
+             document.getElementById("minutes").textContent = minutes.toString().padStart(2, "0");
+             document.getElementById("seconds").textContent = seconds.toString().padStart(2, "0");
+ 
+             // Update the progress bar
+             const totalTime = targetDate - startDate;
+             const progress = Math.round(((currentDate - startDate) / totalTime) * 100);
+             document.getElementById("progressBar").style.width = progress + "%";
+ 
+             if (progress >= 10) {
+                 // Show the popup when progress reaches 10%
+                 //document.getElementById("popup").style.display = "block";
+ 
+                 // Existing code for message and cat image
+                 document.getElementById("message").textContent = "A few more days 'Mi lady' ko online aane";
+                 document.getElementById("message").textContent = "A few more hours 'Mi lady' ko online aane";
+             }
+ 
+             if (progress >= 100) {
+                 document.getElementById("message").textContent = "Aakhir aa hi gayi vapas Laila🎀";
+                 document.getElementById("popup").style.display = "none"; // Hide popup at 100%
+             }
+         }
+ 
+         setInterval(updateCountdown, 1000);  // Update every second
+     </script>
+ </body>
+ </html>
